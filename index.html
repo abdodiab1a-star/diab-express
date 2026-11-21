@@ -568,4 +568,806 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap:
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast-container"></div>
+
+  <header class="site-header">
+    <div class="switcher-bar">
+      <div class="switcher-inner">
+        <div>
+          <span class="status-dot"></span>
+          <strong id="portal-mode-indicator">الوضع الحالي: الموقع العام للعملاء (تتبع وحجز)</strong>
+          <span style="color:#94a3b8;"> | قاعدة البيانات: Orders</span>
+        </div>
+        <div class="mode-actions">
+          <button type="button" id="btn-switch-public" class="mode-btn active" onclick="activatePortalMode('public')">
+            <i class="fa-solid fa-globe"></i> الموقع والتتبع والحجز
+          </button>
+          <button type="button" id="btn-switch-command" class="mode-btn" onclick="activatePortalMode('command')">
+            <i class="fa-solid fa-shield-halved" style="color:#fb923c;"></i> مركز القيادة والإدارة
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-inner">
+      <a href="#home" class="brand" onclick="activatePortalMode('public')">
+        <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <div>
+          <div class="brand-title">DIAB <span>EXPRESS</span></div>
+          <div class="brand-sub">دياب إكسبريس | شحن وخدمات لوجستية</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#home">الرئيسية</a>
+        <a href="#services">خدماتنا</a>
+        <a href="#rules">شروط العمل</a>
+        <a href="#track">تتبع شحنتك</a>
+        <a href="#update-shipment">تحديث شحنة</a>
+        <a href="#booking">اطلب شحنة</a>
+        <a href="#footer">تواصل معنا</a>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:8px;">
+        <a href="#booking" class="btn-fire" style="padding:8px 14px;font-size:13px;" onclick="activatePortalMode('public')">
+          <i class="fa-solid fa-box-open"></i> حجز سريع
+        </a>
+        <button type="button" class="mobile-toggle" aria-label="القائمة" onclick="toggleMobileMenu()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="mobile-menu hidden">
+      <a href="#home" onclick="closeMobileMenu()">الرئيسية</a>
+      <a href="#services" onclick="closeMobileMenu()">خدماتنا</a>
+      <a href="#rules" onclick="closeMobileMenu()">شروط العمل</a>
+      <a href="#track" onclick="closeMobileMenu()">تتبع شحنتك</a>
+      <a href="#update-shipment" onclick="closeMobileMenu()">تحديث شحنة</a>
+      <a href="#booking" onclick="closeMobileMenu()">اطلب شحنة</a>
+      <a href="#footer" onclick="closeMobileMenu()">تواصل معنا</a>
+    </div>
+  </header>
+
+  <div id="public-site-shell">
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="pill-badge">
+            <i class="fa-solid fa-bolt"></i>
+            <span>مزامنة فورية عبر جميع الأجهزة من شيت Orders</span>
+          </div>
+          <h1>شحن محلي ودولي فائق السرعة مع <span>دياب إكسبريس</span></h1>
+          <p>
+            نقل الباسبورات، التأشيرات، المستندات الهامة، والطرود التجارية داخل جميع محافظات مصر وخارجها بدقة والتزام كامل.
+          </p>
+          <div class="hero-btns">
+            <a href="#booking" class="btn-fire"><i class="fa-solid fa-truck-fast"></i> احجز شحنة الآن</a>
+            <a href="#track" class="btn-light"><i class="fa-solid fa-magnifying-glass-location"></i> تتبع شحنتك</a>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-val">12 - 48 ساعة</div>
+              <div class="metric-lbl">توصيل محلي لكل المحافظات</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val">حتى 7 أيام</div>
+              <div class="metric-lbl">شحن دولي سريع خارج مصر</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val">قبل 1:30 ظهراً</div>
+              <div class="metric-lbl">استلام في نفس اليوم</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vip-card">
+          <div class="vip-head">
+            <div>
+              <div style="font-weight:900;font-size:17px;">خدمة VIP للمستندات</div>
+              <div style="font-size:12px;color:#94a3b8;">تأشيرات • باسبورات • عقود شركات</div>
+            </div>
+            <span class="vip-tag">متاح الآن</span>
+          </div>
+          <div class="pickup-box">
+            <div style="font-weight:800;color:#fb923c;margin-bottom:4px;">مواعيد الاستلام (Pick-up)</div>
+            <div>الطلبات المسجلة <strong>قبل 1:30 ظهراً</strong> تُستلم في نفس اليوم، وبعد ذلك تُستلم في اليوم التالي.</div>
+          </div>
+          <a href="https://wa.me/201038268327" target="_blank" rel="noopener noreferrer" class="wa-btn">
+            <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i>
+            <span dir="ltr">01038268327</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section-white">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">خدماتنا اللوجستية</span>
+          <h2>حلول شحن متكاملة للأفراد والشركات</h2>
+          <p>نقل آمن ومنتظم للمستندات الرسمية، الباسبورات، والطرود المحلية والدولية.</p>
+        </div>
+        <div class="cards-4">
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-passport"></i></div>
+            <h3>الباسبورات والتأشيرات</h3>
+            <p>نقل مباشر وآمن لجوازات السفر والتأشيرات وأوراق السفارات للأفراد والشركات.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <h3>الشحن المحلي السريع</h3>
+            <p>تغطية شاملة لجميع محافظات مصر خلال <strong>12 إلى 48 ساعة</strong>.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-plane-up"></i></div>
+            <h3>الشحن الدولي السريع</h3>
+            <p>شحن دولي موثوق خارج مصر بمدة توصيل حتى <strong>7 أيام عمل</strong>.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-file-signature"></i></div>
+            <h3>الطرود والتعاقدات</h3>
+            <p>نقل العقود والطرود التجارية للشركات والمكاتب بانتظام ودقة عالية.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rules" class="section-gray">
+      <div class="container">
+        <div class="sec-head">
+          <h2>سياسة وقواعد العمل</h2>
+          <p>قواعد واضحة لضمان سرعة الاستلام والتسليم وحماية حقوق جميع الأطراف.</p>
+        </div>
+        <div class="cards-3">
+          <div class="rule-card">
+            <h3>جدول الاستلام (Pick-up)</h3>
+            <p>الطلبات المسجلة قبل <strong>1:30 ظهراً</strong> تُستلم في نفس اليوم، وبعد ذلك تُستلم في اليوم التالي.</p>
+          </div>
+          <div class="rule-card orange">
+            <h3>الدفع المسبق وتأكيد السعر</h3>
+            <p>يتم سداد قيمة الشحن مسبقاً قبل الاستلام بعد تأكيد السعر الرسمي عبر واتساب <strong>01038268327</strong>.</p>
+          </div>
+          <div class="rule-card danger">
+            <h3>حظر نقل الشيكات والأوراق المالية</h3>
+            <p>لا تقوم الشركة بنقل أو استلام أي شيكات بنكية أو أوراق مالية قابلة للصرف أو مبالغ نقدية.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="track" class="section-dark">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">خدمة التتبع المباشر</span>
+          <h2>تتبع حالة شحنتك الآن</h2>
+          <p>
+            جرّب مثال:
+            <button type="button" onclick="fillSampleTracking('DE-2026-1001')" style="background:none;border:none;color:#fb923c;font-weight:800;text-decoration:underline;cursor:pointer;" dir="ltr">DE-2026-1001</button>
+            أو
+            <button type="button" onclick="fillSampleTracking('DE-2026-1002')" style="background:none;border:none;color:#fb923c;font-weight:800;text-decoration:underline;cursor:pointer;" dir="ltr">DE-2026-1002</button>
+          </p>
+        </div>
+
+        <div class="panel-box">
+          <form id="tracking-form" class="track-form">
+            <input type="text" id="tracking-input" class="form-control" required placeholder="أدخل الرقم المرجعي مثل DE-2026-1001" dir="ltr" />
+            <button type="submit" id="tracking-submit-btn" class="btn-fire" style="padding:12px 24px;">
+              <i class="fa-solid fa-magnifying-glass"></i> تتبع الشحنة
+            </button>
+          </form>
+          <div id="tracking-result" class="result-card hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="update-shipment" class="section-gray">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">إدارة ومتابعة الحركة</span>
+          <h2>تحديث حالة الشحنة</h2>
+          <p>تحديث حالة الشحنة مباشرة في شيت Orders ليظهر فوراً في التتبع من أي جهاز.</p>
+        </div>
+
+        <div class="panel-box">
+          <form id="public-status-update-form">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>الرقم المرجعي للشحنة *</label>
+                <input type="text" id="public-update-ref-input" class="form-control" required placeholder="مثال: DE-2026-1001" dir="ltr" />
+              </div>
+              <div class="form-group">
+                <label>حالة الشحنة الجديدة *</label>
+                <select id="public-update-status-select" class="form-control" required>
+                  <option value="تم تسجيل الطلب">تم تسجيل الطلب</option>
+                  <option value="تم الاستلام من العميل">تم الاستلام من العميل</option>
+                  <option value="في الطريق للفرع">في الطريق للفرع</option>
+                  <option value="قيد النقل">قيد النقل</option>
+                  <option value="جاري التوصيل للمستلم">جاري التوصيل للمستلم</option>
+                  <option value="تم التسليم بنجاح">تم التسليم بنجاح</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>تفاصيل آخر تحديث (اختياري)</label>
+              <input type="text" id="public-update-notes-input" class="form-control" placeholder="مثال: خرج المندوب للتسليم" />
+            </div>
+            <button type="submit" id="public-update-submit-btn" class="btn-fire" style="padding:12px 24px;">
+              <i class="fa-solid fa-arrows-rotate"></i> حفظ وتحديث الحالة الآن
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking" class="section-white">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">حجز شحنة جديدة</span>
+          <h2>اطلب شحنتك الآن</h2>
+          <p>سيتم تسجيل الطلب مباشرة في شيت Orders وإصدار رقم مرجعي للتتبع الفوري.</p>
+        </div>
+
+        <div class="panel-box">
+          <form id="booking-form">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>الراسل / الشركة *</label>
+                <input type="text" id="sender-name" class="form-control" required placeholder="مثال: شركة الأفق للسياحة" />
+              </div>
+              <div class="form-group">
+                <label>تليفون الراسل *</label>
+                <input type="tel" id="sender-phone" class="form-control" required placeholder="01038268327" dir="ltr" />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>نوع الشحنة *</label>
+                <select id="shipment-type" class="form-control" required>
+                  <option value="باسبورات (جوازات سفر)">باسبورات (جوازات سفر)</option>
+                  <option value="تأشيرات وأوراق سفارات">تأشيرات وأوراق سفارات</option>
+                  <option value="مستندات وعقود شركات">مستندات وعقود شركات</option>
+                  <option value="طرد تجاري / عينة">طرد تجاري / عينة</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>نطاق الشحن *</label>
+                <select id="shipping-scope" class="form-control" required>
+                  <option value="شحن محلي (12 - 48 ساعة)">شحن محلي (12 - 48 ساعة)</option>
+                  <option value="شحن دولي (حتى 7 أيام عمل)">شحن دولي (حتى 7 أيام عمل)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>عنوان الاستلام *</label>
+                <input type="text" id="pickup-address" class="form-control" required placeholder="المحافظة - المنطقة - العنوان" />
+              </div>
+              <div class="form-group">
+                <label>عنوان التسليم *</label>
+                <input type="text" id="delivery-address" class="form-control" required placeholder="المحافظة أو الدولة - العنوان" />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>اسم المستلم *</label>
+                <input type="text" id="recipient-name" class="form-control" required placeholder="اسم الشخص أو الفرع المستلم" />
+              </div>
+              <div class="form-group">
+                <label>تليفون المستلم *</label>
+                <input type="tel" id="recipient-phone" class="form-control" required placeholder="رقم هاتف المستلم" dir="ltr" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>ملاحظات إضافية</label>
+              <input type="text" id="shipment-notes" class="form-control" placeholder="أي تعليمات خاصة بالاستلام أو التسليم" />
+            </div>
+
+            <button type="submit" id="booking-submit-btn" class="btn-fire" style="width:100%;padding:14px 20px;font-size:15px;">
+              <i class="fa-solid fa-paper-plane"></i> تأكيد وحجز الشحنة الآن
+            </button>
+          </form>
+
+          <div id="booking-confirmation" class="hidden" style="margin-top:18px;background:#ecfdf5;border:1px solid #6ee7b7;border-radius:16px;padding:16px;"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section id="command-center-shell" class="hidden">
+    <div class="container">
+      <div class="dash-banner">
+        <div>
+          <div style="color:#fb923c;font-weight:800;font-size:12px;">مركز القيادة والإدارة</div>
+          <h2 style="margin:4px 0 0;font-size:24px;font-weight:900;">إدارة شحنات Diab Express (قاعدة Orders)</h2>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <button type="button" class="btn-fire" style="padding:10px 16px;font-size:13px;" onclick="syncAllShipmentsFromCloud(true)">
+            <i class="fa-solid fa-rotate"></i> مزامنة الشيت الآن
+          </button>
+          <button type="button" class="btn-light" style="padding:10px 16px;font-size:13px;" onclick="activatePortalMode('public')">
+            العودة للموقع العام
+          </button>
+          <button type="button" class="btn-light" style="padding:10px 16px;font-size:13px;" onclick="logoutAdminCenter()">
+            <i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">إجمالي الشحنات</div>
+          <div id="stat-total" class="stat-num">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">شحن محلي</div>
+          <div id="stat-local" class="stat-num" style="color:#ea580c;">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">شحن دولي</div>
+          <div id="stat-intl" class="stat-num" style="color:#1e3a8a;">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">تم التسليم</div>
+          <div id="stat-delivered" class="stat-num" style="color:#059669;">0</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;">
+          <h3 style="margin:0;font-size:18px;font-weight:900;">سجل الشحنات من تبويب Orders</h3>
+          <input type="text" id="admin-search-input" class="form-control" style="max-width:320px;" oninput="renderAdminTable()" placeholder="ابحث بالرقم المرجعي أو الراسل أو المستلم..." />
+        </div>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>الرقم المرجعي</th>
+              <th>الراسل / الشركة</th>
+              <th>المستلم</th>
+              <th>النطاق</th>
+              <th>الحالة</th>
+              <th>آخر تحديث</th>
+              <th>تحديث سريع</th>
+            </tr>
+          </thead>
+          <tbody id="admin-shipments-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer" class="site-footer">
+    <div class="container footer-inner">
+      <div><strong>DIAB EXPRESS</strong> — شحن وخدمات لوجستية محلية ودولية</div>
+      <a href="https://wa.me/201038268327" target="_blank" rel="noopener noreferrer" style="color:#34d399;font-weight:800;text-decoration:none;" dir="ltr">
+        <i class="fa-brands fa-whatsapp"></i> 01038268327
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxkzncaPo5iWzuw25lG5H-xjd_lkqiJesnUyw93nbohIMR4PvPtcFedcje9yEnsBnnH8A/exec".trim();
+    const CACHE_KEY = "diab_express_orders_cache_v2";
+    const ADMIN_USER = "Owner";
+    const ADMIN_PASS = "01515417332";
+    const AUTH_SESSION_KEY = "diab_express_admin_auth_v1";
+
+    let shipmentsCache = [];
+
+    function isAdminAuthenticated() {
+      try {
+        return sessionStorage.getItem(AUTH_SESSION_KEY) === "1";
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function setAdminAuthenticated(val) {
+      try {
+        if (val) sessionStorage.setItem(AUTH_SESSION_KEY, "1");
+        else sessionStorage.removeItem(AUTH_SESSION_KEY);
+      } catch (e) {}
+    }
+
+    function showToast(message, type) {
+      const container = document.getElementById("toast-container");
+      const el = document.createElement("div");
+      el.className = "toast-msg" + (type === "success" ? " toast-success" : type === "error" ? " toast-error" : "");
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    function normalizeRef(raw) {
+      let val = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+      if (/^DE\d{4}-\d+$/.test(val)) val = val.replace(/^DE/, "DE-");
+      return val;
+    }
+
+    function saveLocalCache(list) {
+      shipmentsCache = Array.isArray(list) ? list : [];
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(shipmentsCache)); } catch (e) {}
+    }
+
+    function loadLocalCache() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) shipmentsCache = parsed;
+        }
+      } catch (e) {}
+    }
+
+    function normalizeShipmentItem(item) {
+      if (!item || typeof item !== "object") return null;
+      const ref = normalizeRef(item.ref || item["الرقم المرجعي"] || "");
+      if (!ref) return null;
+      const scope = item.scope || item.shippingScope || item["نطاق الشحن"] || "شحن محلي (12 - 48 ساعة)";
+      return {
+        ref,
+        arrivedAt: item.arrivedAt || item["وقت الوصول للشيت"] || "",
+        createdAt: item.createdAt || item["توقيت التسجيل"] || "",
+        senderName: item.senderName || item["الراسل / الشركة"] || "",
+        senderPhone: item.senderPhone || item["تليفون الراسل"] || "",
+        pickupAddress: item.pickupAddress || item["عنوان الاستلام"] || "",
+        shipmentType: item.shipmentType || item["نوع الشحنة"] || "",
+        scope,
+        deliveryEta: item.deliveryEta || item["مدة التسليم المتوقعة"] || "",
+        recipientName: item.recipientName || item.receiverName || item["اسم المستلم"] || "",
+        recipientPhone: item.recipientPhone || item.receiverPhone || item["تليفون المستلم"] || "",
+        deliveryAddress: item.deliveryAddress || item["عنوان التسليم"] || "",
+        notes: item.notes || item["ملاحظات إضافية"] || "",
+        status: item.status || item["حالة الشحنة"] || "تم تسجيل الطلب",
+        lastUpdate: item.lastUpdate || item["آخر تحديث"] || ""
+      };
+    }
+
+    async function fetchAllShipmentsFromCloud(showNotice) {
+      try {
+        const res = await fetch(WEB_APP_URL + "?action=list&t=" + Date.now(), { cache: "no-store" });
+        const data = await res.json();
+        const rawList = Array.isArray(data) ? data : (data.shipments || data.orders || data.data || []);
+        const normalized = rawList.map(normalizeShipmentItem).filter(Boolean);
+        saveLocalCache(normalized);
+        renderAdminTable();
+        if (showNotice) showToast("تمت مزامنة " + normalized.length + " شحنة من شيت Orders", "success");
+        return normalized;
+      } catch (err) {
+        renderAdminTable();
+        if (showNotice) showToast("تعذر جلب البيانات من الشيت حالياً", "error");
+        return shipmentsCache;
+      }
+    }
+
+    async function fetchShipmentByRef(rawRef) {
+      const ref = normalizeRef(rawRef);
+      if (!ref) return null;
+      try {
+        const res = await fetch(WEB_APP_URL + "?ref=" + encodeURIComponent(ref) + "&t=" + Date.now(), { cache: "no-store" });
+        const data = await res.json();
+        if (data && data.found) {
+          const item = normalizeShipmentItem(data.shipment || data);
+          if (item) return item;
+        }
+      } catch (e) {}
+
+      const list = await fetchAllShipmentsFromCloud(false);
+      return list.find((s) => normalizeRef(s.ref) === ref) || null;
+    }
+
+    async function postToWebApp(payload) {
+      await fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    function fillSampleTracking(ref) {
+      const input = document.getElementById("tracking-input");
+      input.value = ref;
+      document.getElementById("tracking-form").dispatchEvent(new Event("submit"));
+    }
+
+    function renderTrackingCard(ref, shipment) {
+      const box = document.getElementById("tracking-result");
+      box.classList.remove("hidden");
+      if (!shipment) {
+        box.innerHTML =
+          '<div style="background:rgba(127,29,29,0.45);border:1px solid rgba(248,113,113,0.45);border-radius:16px;padding:18px;text-align:center;">' +
+          '<div style="font-weight:900;color:#fca5a5;font-size:15px;">(' + ref + ') لم يتم العثور على شحنة بالرقم</div>' +
+          '<div style="font-size:12px;color:#e2e8f0;margin-top:4px;">تأكد من الرقم المرجعي أو تواصل عبر واتساب <span dir="ltr">01038268327</span></div>' +
+          "</div>";
+        return;
+      }
+
+      box.innerHTML =
+        '<div style="background:var(--navy-950);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:18px;">' +
+          '<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:12px;">' +
+            '<div><div style="font-size:12px;color:#94a3b8;">رقم البوليصة</div><div style="font-size:20px;font-weight:900;" dir="ltr">' + shipment.ref + '</div></div>' +
+            '<span class="status-badge">' + (shipment.status || "تم تسجيل الطلب") + '</span>' +
+          '</div>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-item"><div style="font-size:11px;color:#94a3b8;">وجهة التسليم</div><div style="font-weight:800;">' + (shipment.deliveryAddress || "-") + '</div></div>' +
+            '<div class="detail-item"><div style="font-size:11px;color:#94a3b8;">نطاق الشحن</div><div style="font-weight:800;">' + (shipment.scope || "-") + '</div></div>' +
+            '<div class="detail-item"><div style="font-size:11px;color:#94a3b8;">نوع الشحنة</div><div style="font-weight:800;">' + (shipment.shipmentType || "-") + '</div></div>' +
+          '</div>' +
+          '<div style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.35);border-radius:12px;padding:12px;font-size:13px;">' +
+            '<strong style="color:#fb923c;">آخر تحديث:</strong> ' + (shipment.lastUpdate || shipment.status || "تم تسجيل الطلب") +
+          '</div>' +
+        '</div>';
+    }
+
+    document.getElementById("tracking-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const ref = normalizeRef(document.getElementById("tracking-input").value);
+      document.getElementById("tracking-input").value = ref;
+      const btn = document.getElementById("tracking-submit-btn");
+      btn.disabled = true;
+      btn.textContent = "جاري البحث...";
+      try {
+        const shipment = await fetchShipmentByRef(ref);
+        renderTrackingCard(ref, shipment);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> تتبع الشحنة';
+      }
+    });
+
+    document.getElementById("booking-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById("booking-submit-btn");
+      btn.disabled = true;
+      btn.textContent = "جاري تسجيل الشحنة...";
+
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      const timestamp = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate()) + " " + pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
+      const ref = "DE-" + now.getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
+      const scope = document.getElementById("shipping-scope").value;
+
+      const payload = {
+        ref,
+        createdAt: timestamp,
+        senderName: document.getElementById("sender-name").value.trim(),
+        senderPhone: document.getElementById("sender-phone").value.trim(),
+        pickupAddress: document.getElementById("pickup-address").value.trim(),
+        shipmentType: document.getElementById("shipment-type").value,
+        shippingScope: scope,
+        scope,
+        deliveryEta: scope.indexOf("دولي") !== -1 ? "حتى 7 أيام عمل" : "12 - 48 ساعة",
+        recipientName: document.getElementById("recipient-name").value.trim(),
+        recipientPhone: document.getElementById("recipient-phone").value.trim(),
+        deliveryAddress: document.getElementById("delivery-address").value.trim(),
+        notes: document.getElementById("shipment-notes").value.trim(),
+        status: "تم تسجيل الطلب",
+        lastUpdate: "تم تسجيل الطلب (" + timestamp + ")"
+      };
+
+      try {
+        await postToWebApp(payload);
+        saveLocalCache([payload].concat(shipmentsCache));
+        renderAdminTable();
+        e.target.reset();
+
+        const conf = document.getElementById("booking-confirmation");
+        conf.classList.remove("hidden");
+        conf.innerHTML =
+          '<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">' +
+            '<div><div style="color:#047857;font-weight:900;font-size:17px;">تم تسجيل شحنتك بنجاح!</div>' +
+            '<div style="font-size:14px;margin-top:4px;">الرقم المرجعي: <strong dir="ltr">' + ref + '</strong></div></div>' +
+            '<button type="button" class="btn-fire" style="padding:10px 16px;font-size:13px;" onclick="document.getElementById(\'track\').scrollIntoView({behavior:\'smooth\'});fillSampleTracking(\'' + ref + '\');">تتبع الشحنة الآن</button>' +
+          '</div>';
+        showToast("تم تسجيل الشحنة برقم " + ref, "success");
+      } catch (err) {
+        showToast("تعذر إرسال الطلب", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> تأكيد وحجز الشحنة الآن';
+      }
+    });
+
+    document.getElementById("public-status-update-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const ref = normalizeRef(document.getElementById("public-update-ref-input").value);
+      const status = document.getElementById("public-update-status-select").value;
+      const notes = document.getElementById("public-update-notes-input").value.trim();
+      const updateText = notes ? (status + " - " + notes) : status;
+
+      const btn = document.getElementById("public-update-submit-btn");
+      btn.disabled = true;
+      btn.textContent = "جاري التحديث...";
+
+      try {
+        await postToWebApp({
+          action: "update",
+          ref,
+          status,
+          updateText,
+          lastUpdate: updateText
+        });
+        showToast("تم تحديث حالة " + ref + " إلى: " + status, "success");
+        setTimeout(() => fetchAllShipmentsFromCloud(false), 1200);
+      } catch (err) {
+        showToast("تعذر إرسال التحديث", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> حفظ وتحديث الحالة الآن';
+      }
+    });
+
+    function renderAdminTable() {
+      const q = (document.getElementById("admin-search-input")?.value || "").trim().toLowerCase();
+      const tbody = document.getElementById("admin-shipments-tbody");
+      if (!tbody) return;
+
+      const total = shipmentsCache.length;
+      const localCount = shipmentsCache.filter((s) => String(s.scope).indexOf("محلي") !== -1).length;
+      const intlCount = shipmentsCache.filter((s) => String(s.scope).indexOf("دولي") !== -1).length;
+      const deliveredCount = shipmentsCache.filter((s) => String(s.status).indexOf("تم التسليم") !== -1).length;
+
+      document.getElementById("stat-total").textContent = total;
+      document.getElementById("stat-local").textContent = localCount;
+      document.getElementById("stat-intl").textContent = intlCount;
+      document.getElementById("stat-delivered").textContent = deliveredCount;
+
+      const filtered = shipmentsCache.filter((s) => {
+        if (!q) return true;
+        return [s.ref, s.senderName, s.recipientName, s.status, s.deliveryAddress]
+          .some((v) => String(v || "").toLowerCase().indexOf(q) !== -1);
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#94a3b8;font-weight:800;padding:24px;">لا توجد شحنات معروضة حالياً — اضغط مزامنة الشيت الآن</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((s) =>
+        "<tr>" +
+          '<td style="font-weight:900;" dir="ltr">' + s.ref + "</td>" +
+          '<td style="font-weight:700;">' + (s.senderName || "-") + "</td>" +
+          "<td>" + (s.recipientName || "-") + "</td>" +
+          '<td style="font-size:12px;font-weight:700;">' + (s.scope || "-") + "</td>" +
+          '<td><span class="status-badge">' + (s.status || "-") + "</span></td>" +
+          '<td style="font-size:12px;color:#64748b;">' + (s.lastUpdate || "-") + "</td>" +
+          "<td>" +
+            '<select onchange="quickUpdateStatus(\'' + s.ref + '\', this.value)" style="padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-family:inherit;font-size:12px;font-weight:700;">' +
+              '<option value="">اختر حالة...</option>' +
+              '<option value="تم الاستلام من العميل">تم الاستلام من العميل</option>' +
+              '<option value="في الطريق للفرع">في الطريق للفرع</option>' +
+              '<option value="قيد النقل">قيد النقل</option>' +
+              '<option value="جاري التوصيل للمستلم">جاري التوصيل للمستلم</option>' +
+              '<option value="تم التسليم بنجاح">تم التسليم بنجاح</option>' +
+            "</select>" +
+          "</td>" +
+        "</tr>"
+      ).join("");
+    }
+
+    async function quickUpdateStatus(ref, newStatus) {
+      if (!newStatus) return;
+      await postToWebApp({
+        action: "update",
+        ref,
+        status: newStatus,
+        updateText: newStatus,
+        lastUpdate: newStatus
+      });
+      showToast("تم تحديث " + ref + " إلى " + newStatus, "success");
+      setTimeout(() => fetchAllShipmentsFromCloud(false), 1200);
+    }
+
+    function showAdminLoginModal() {
+      if (document.getElementById("admin-login-modal")) return;
+      const backdrop = document.createElement("div");
+      backdrop.id = "admin-login-modal";
+      backdrop.className = "auth-modal-backdrop";
+      backdrop.innerHTML =
+        '<div class="auth-modal-card">' +
+          '<h3>تسجيل دخول الإدارة</h3>' +
+          '<p>أدخل اسم المستخدم وكلمة المرور للوصول إلى مركز القيادة.</p>' +
+          '<form id="admin-login-form">' +
+            '<div class="form-group">' +
+              '<label>اسم المستخدم</label>' +
+              '<input type="text" id="admin-login-user" class="form-control" required autocomplete="username" />' +
+            '</div>' +
+            '<div class="form-group">' +
+              '<label>كلمة المرور</label>' +
+              '<input type="password" id="admin-login-pass" class="form-control" required autocomplete="current-password" />' +
+            '</div>' +
+            '<div class="auth-actions">' +
+              '<button type="submit" class="btn-fire" style="flex:1;padding:11px 14px;font-size:14px;">دخول</button>' +
+              '<button type="button" id="admin-login-cancel" class="btn-light" style="padding:11px 14px;font-size:14px;">إلغاء</button>' +
+            '</div>' +
+          '</form>' +
+        '</div>';
+
+      document.body.appendChild(backdrop);
+
+      document.getElementById("admin-login-cancel").addEventListener("click", function () {
+        backdrop.remove();
+        openCommandCenterView(false);
+      });
+
+      document.getElementById("admin-login-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const u = document.getElementById("admin-login-user").value.trim();
+        const p = document.getElementById("admin-login-pass").value;
+        if (u === ADMIN_USER && p === ADMIN_PASS) {
+          setAdminAuthenticated(true);
+          backdrop.remove();
+          showToast("تم تسجيل الدخول بنجاح", "success");
+          openCommandCenterView(true);
+        } else {
+          showToast("اسم المستخدم أو كلمة المرور غير صحيحة", "error");
+        }
+      });
+    }
+
+    function logoutAdminCenter() {
+      setAdminAuthenticated(false);
+      openCommandCenterView(false);
+      showToast("تم تسجيل الخروج من مركز القيادة", "info");
+    }
+
+    function openCommandCenterView(showCommand) {
+      const pub = document.getElementById("public-site-shell");
+      const cmd = document.getElementById("command-center-shell");
+      const indicator = document.getElementById("portal-mode-indicator");
+      const btnPub = document.getElementById("btn-switch-public");
+      const btnCmd = document.getElementById("btn-switch-command");
+
+      if (showCommand && isAdminAuthenticated()) {
+        pub.classList.add("hidden");
+        cmd.classList.remove("hidden");
+        indicator.textContent = "الوضع الحالي: مركز القيادة والإدارة";
+        btnCmd.classList.add("active");
+        btnPub.classList.remove("active");
+        fetchAllShipmentsFromCloud(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        cmd.classList.add("hidden");
+        pub.classList.remove("hidden");
+        indicator.textContent = "الوضع الحالي: الموقع العام للعملاء (تتبع وحجز)";
+        btnPub.classList.add("active");
+        btnCmd.classList.remove("active");
+      }
+    }
+
+    function activatePortalMode(mode) {
+      if (mode === "command") {
+        if (isAdminAuthenticated()) {
+          openCommandCenterView(true);
+        } else {
+          showAdminLoginModal();
+        }
+      } else {
+        openCommandCenterView(false);
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById("mobile-menu").classList.toggle("hidden");
+    }
+    function closeMobileMenu() {
+      document.getElementById("mobile-menu").classList.add("hidden");
+    }
+
+    loadLocalCache();
+    renderAdminTable();
+    fetchAllShipmentsFromCloud(false);
+  </script>
+</body>
+</html>
