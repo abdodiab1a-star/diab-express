@@ -4,182 +4,1258 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DIAB EXPRESS | دياب إكسبريس للشحن والخدمات اللوجستية</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { cairo: ["Cairo", "sans-serif"] },
-          colors: {
-            navy: { 950: "#060e1a", 900: "#0b192c", 800: "#11243d", 700: "#1e3a8a" },
-            fire: { 400: "#fb923c", 500: "#f97316", 600: "#ea580c", 700: "#c2410c" }
-          }
-        }
-      }
-    };
-  </script>
   <style>
-    body { font-family: "Cairo", sans-serif; }
-    .glass-nav { background: rgba(11, 25, 44, 0.92); backdrop-filter: blur(12px); }
-    .hero-pattern {
-      background-color: #0b192c;
-      background-image: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.14), transparent 45%),
-                        radial-gradient(circle at 80% 70%, rgba(30, 58, 138, 0.28), transparent 45%);
+    :root {
+      --navy-950: #060e1a;
+      --navy-900: #0b192c;
+      --navy-800: #11243d;
+      --navy-700: #1e3a8a;
+      --fire-500: #f97316;
+      --fire-600: #ea580c;
+      --fire-400: #fb923c;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-600: #475569;
+      --emerald-600: #059669;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: var(--slate-50);
+      color: var(--navy-900);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 360px;
+      width: calc(100% - 32px);
+      pointer-events: none;
+    }
+    .toast-msg {
+      padding: 12px 16px;
+      border-radius: 14px;
+      color: #fff;
+      font-weight: 800;
+      font-size: 13px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+      background: var(--navy-900);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .toast-success { background: #059669; border-color: #10b981; }
+    .toast-error { background: #dc2626; border-color: #f87171; }
+
+    /* Top Header & Switcher */
+    header.site-header {
+      position: fixed;
+      top: 0;
+      inset-inline: 0;
+      z-index: 1000;
+      background: rgba(11, 25, 44, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .switcher-bar {
+      background: var(--navy-950);
+      border-bottom: 1px solid rgba(249, 115, 22, 0.35);
+      padding: 8px 16px;
+    }
+    .switcher-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #34d399;
+      margin-left: 6px;
+    }
+    .mode-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mode-btn {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .mode-btn.active {
+      background: var(--fire-500);
+      border-color: var(--fire-500);
+      color: #fff;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--navy-800);
+      border: 1px solid rgba(249, 115, 22, 0.45);
+      color: var(--fire-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .brand-title { font-weight: 900; font-size: 18px; line-height: 1.1; }
+    .brand-title span { color: var(--fire-500); }
+    .brand-sub { font-size: 11px; color: #cbd5e1; font-weight: 600; }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .nav-links a { color: #e2e8f0; text-decoration: none; }
+    .nav-links a:hover { color: var(--fire-400); }
+    @media (min-width: 1024px) {
+      .nav-links { display: flex; }
+      .mobile-toggle { display: none !important; }
+    }
+
+    .btn-fire {
+      background: linear-gradient(to left, var(--fire-500), var(--fire-600));
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-family: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-fire:hover { opacity: 0.95; }
+
+    .btn-light {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      font-family: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .mobile-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .mobile-menu {
+      background: var(--navy-900);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mobile-menu a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .mobile-menu a:hover { background: rgba(255, 255, 255, 0.1); }
+
+    /* Hero */
+    #public-site-shell { padding-top: 108px; }
+    .hero {
+      background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.16), transparent 45%),
+                  radial-gradient(circle at 80% 70%, rgba(30, 58, 138, 0.35), transparent 45%),
+                  var(--navy-900);
+      color: #fff;
+      padding: 56px 0;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .hero-grid { grid-template-columns: 7fr 5fr; }
+    }
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      color: var(--fire-400);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .hero h1 { font-size: 32px; font-weight: 900; margin: 14px 0 12px; line-height: 1.25; }
+    @media (min-width: 768px) { .hero h1 { font-size: 46px; } }
+    .hero h1 span { color: var(--fire-500); }
+    .hero p { color: #cbd5e1; font-size: 16px; margin: 0 0 20px; }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .hero-btns .btn-fire, .hero-btns .btn-light { padding: 12px 22px; font-size: 15px; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    @media (min-width: 640px) { .metrics-grid { grid-template-columns: repeat(3, 1fr); } }
+    .metric-box {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .metric-val { color: var(--fire-400); font-weight: 900; font-size: 20px; }
+    .metric-lbl { color: #cbd5e1; font-size: 12px; font-weight: 700; margin-top: 4px; }
+
+    .vip-card {
+      background: var(--navy-800);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+      padding: 24px;
+    }
+    .vip-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+    .vip-tag {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .pickup-box {
+      background: var(--navy-950);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 13px;
+      color: #e2e8f0;
+      margin-bottom: 16px;
+    }
+    .wa-btn {
+      width: 100%;
+      background: #059669;
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Sections */
+    .section-white { background: #fff; padding: 64px 0; }
+    .section-gray { background: var(--slate-100); padding: 64px 0; border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200); }
+    .section-dark { background: var(--navy-900); color: #fff; padding: 64px 0; }
+
+    .sec-head { text-align: center; max-width: 720px; margin: 0 auto 40px; }
+    .sec-head h2 { font-size: 28px; font-weight: 900; margin: 10px 0 8px; }
+    @media (min-width: 768px) { .sec-head h2 { font-size: 36px; } }
+    .sec-head p { color: var(--slate-600); margin: 0; font-size: 15px; }
+    .section-dark .sec-head p { color: #cbd5e1; }
+
+    .cards-4 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 640px) { .cards-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .cards-4 { grid-template-columns: repeat(4, 1fr); } }
+
+    .service-card {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 20px;
+      padding: 22px;
+    }
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(249, 115, 22, 0.14);
+      color: var(--fire-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+    .service-card h3 { margin: 0 0 8px; font-size: 18px; font-weight: 800; color: var(--navy-900); }
+    .service-card p { margin: 0; font-size: 14px; color: var(--slate-600); }
+
+    .cards-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 1024px) { .cards-3 { grid-template-columns: repeat(3, 1fr); } }
+
+    .rule-card {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-top: 4px solid var(--navy-700);
+      border-radius: 20px;
+      padding: 22px;
+    }
+    .rule-card.orange { border-top-color: var(--fire-500); }
+    .rule-card.danger {
+      background: var(--navy-900);
+      color: #fff;
+      border: 2px solid rgba(239, 68, 68, 0.65);
+      border-top-width: 2px;
+    }
+    .rule-card h3 { margin: 0 0 10px; font-size: 18px; font-weight: 900; }
+    .rule-card p { margin: 0; font-size: 14px; color: var(--slate-600); }
+    .rule-card.danger p { color: #e2e8f0; }
+
+    /* Forms & Tracking */
+    .panel-box {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(11, 25, 44, 0.06);
+    }
+    .section-dark .panel-box {
+      background: var(--navy-800);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 640px) { .form-row-2 { grid-template-columns: repeat(2, 1fr); } }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 6px; }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--slate-300);
+      background: #fff;
+      color: var(--navy-900);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .section-dark .form-control {
+      background: var(--navy-950);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .track-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .track-form { flex-direction: row; }
+      .track-form .form-control { flex: 1; }
+    }
+
+    .result-card {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 14px 0;
+    }
+    @media (min-width: 640px) { .detail-grid { grid-template-columns: repeat(3, 1fr); } }
+    .detail-item {
+      background: var(--navy-900);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    /* Admin Dashboard */
+    #command-center-shell {
+      padding-top: 120px;
+      padding-bottom: 64px;
+      min-height: 85vh;
+      background: var(--slate-100);
+    }
+    .dash-banner {
+      background: var(--navy-900);
+      color: #fff;
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (min-width: 1024px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .stat-num { font-size: 26px; font-weight: 900; margin-top: 6px; }
+
+    .table-card {
+      background: #fff;
+      border: 1px solid var(--slate-200);
+      border-radius: 24px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    table.orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 13px;
+    }
+    table.orders-table th {
+      padding: 12px;
+      border-bottom: 2px solid var(--slate-200);
+      color: var(--slate-600);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    table.orders-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--slate-100);
+      vertical-align: middle;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.14);
+      color: var(--fire-600);
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    /* Footer */
+    footer.site-footer {
+      background: var(--navy-950);
+      color: #cbd5e1;
+      padding: 28px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
   </style>
 </head>
-<body class="bg-slate-50 text-navy-900 antialiased selection:bg-fire-500 selection:text-white">
+<body>
 
-  <div id="toast-container" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+  <div id="toast-container"></div>
 
-  <!-- Top Bar + Navbar -->
-  <header class="fixed top-0 inset-x-0 z-40 glass-nav border-b border-white/10 text-white">
-    <div class="bg-navy-950 border-b border-fire-500/30 px-4 py-2">
-      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div class="flex items-center gap-2 font-bold text-slate-300">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span id="portal-mode-indicator">الوضع الحالي: الموقع العام للعملاء (تتبع وحجز)</span>
-          <span class="hidden md:inline text-slate-400">| مزامنة سحابية مباشرة (Orders)</span>
+  <header class="site-header">
+    <div class="switcher-bar">
+      <div class="switcher-inner">
+        <div>
+          <span class="status-dot"></span>
+          <strong id="portal-mode-indicator">الوضع الحالي: الموقع العام للعملاء (تتبع وحجز)</strong>
+          <span style="color:#94a3b8;"> | قاعدة البيانات: Orders</span>
         </div>
-        <div class="flex items-center gap-2">
-          <button type="button" id="btn-switch-public" onclick="activatePortalMode('public')"
-            class="px-3 py-1 rounded-lg bg-fire-500 text-white font-extrabold transition cursor-pointer">
-            <i class="fa-solid fa-globe ml-1"></i> الموقع والتتبع والحجز
+        <div class="mode-actions">
+          <button type="button" id="btn-switch-public" class="mode-btn active" onclick="activatePortalMode('public')">
+            <i class="fa-solid fa-globe"></i> الموقع والتتبع والحجز
           </button>
-          <button type="button" id="btn-switch-command" onclick="activatePortalMode('command')"
-            class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 font-extrabold border border-white/15 transition cursor-pointer">
-            <i class="fa-solid fa-shield-halved ml-1 text-fire-400"></i> مركز القيادة والإدارة
+          <button type="button" id="btn-switch-command" class="mode-btn" onclick="activatePortalMode('command')">
+            <i class="fa-solid fa-shield-halved" style="color:#fb923c;"></i> مركز القيادة والإدارة
           </button>
         </div>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <a href="#home" class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 border border-fire-500/40 flex items-center justify-center text-fire-500 text-lg">
-            <i class="fa-solid fa-truck-fast"></i>
-          </div>
-          <div>
-            <span class="text-lg sm:text-xl font-black tracking-wider text-white block leading-none">
-              DIAB <span class="text-fire-500">EXPRESS</span>
-            </span>
-            <span class="text-[11px] text-slate-300 font-semibold">دياب إكسبريس | شحن وخدمات لوجستية</span>
-          </div>
+    <div class="nav-inner">
+      <a href="#home" class="brand" onclick="activatePortalMode('public')">
+        <div class="brand-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <div>
+          <div class="brand-title">DIAB <span>EXPRESS</span></div>
+          <div class="brand-sub">دياب إكسبريس | شحن وخدمات لوجستية</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#home">الرئيسية</a>
+        <a href="#services">خدماتنا</a>
+        <a href="#rules">شروط العمل</a>
+        <a href="#track">تتبع شحنتك</a>
+        <a href="#update-shipment">تحديث شحنة</a>
+        <a href="#booking">اطلب شحنة</a>
+        <a href="#footer">تواصل معنا</a>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:8px;">
+        <a href="#booking" class="btn-fire" style="padding:8px 14px;font-size:13px;" onclick="activatePortalMode('public')">
+          <i class="fa-solid fa-box-open"></i> حجز سريع
         </a>
-
-        <nav class="hidden lg:flex items-center gap-6 text-sm font-bold text-slate-200">
-          <a href="#home" class="hover:text-fire-500 transition">الرئيسية</a>
-          <a href="#services" class="hover:text-fire-500 transition">خدماتنا</a>
-          <a href="#rules" class="hover:text-fire-500 transition">شروط العمل</a>
-          <a href="#track" class="hover:text-fire-500 transition">تتبع شحنتك</a>
-          <a href="#update-shipment" class="hover:text-fire-500 transition">تحديث شحنة</a>
-          <a href="#booking" class="hover:text-fire-500 transition">اطلب شحنة</a>
-          <a href="#footer" class="hover:text-fire-500 transition">تواصل معنا</a>
-        </nav>
-
-        <div class="flex items-center gap-2">
-          <a href="#booking" class="inline-flex items-center gap-2 bg-fire-500 hover:bg-fire-600 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl transition">
-            <i class="fa-solid fa-box-open"></i>
-            <span>حجز سريع</span>
-          </a>
-          <button type="button" id="mobile-menu-btn" aria-label="القائمة" class="lg:hidden p-2 rounded-xl bg-white/10 text-white hover:bg-fire-500 transition">
-            <i class="fa-solid fa-bars"></i>
-          </button>
-        </div>
+        <button type="button" class="mobile-toggle" aria-label="القائمة" onclick="toggleMobileMenu()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
     </div>
 
-    <div id="mobile-menu" class="hidden lg:hidden bg-navy-900 border-t border-white/10 px-4 py-3 space-y-1 text-sm font-bold">
-      <a href="#home" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">الرئيسية</a>
-      <a href="#services" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">خدماتنا</a>
-      <a href="#rules" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">شروط العمل</a>
-      <a href="#track" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">تتبع شحنتك</a>
-      <a href="#update-shipment" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">تحديث شحنة</a>
-      <a href="#booking" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">اطلب شحنة</a>
-      <a href="#footer" class="mobile-link block px-3 py-2 rounded-lg hover:bg-white/10">تواصل معنا</a>
+    <div id="mobile-menu" class="mobile-menu hidden">
+      <a href="#home" onclick="closeMobileMenu()">الرئيسية</a>
+      <a href="#services" onclick="closeMobileMenu()">خدماتنا</a>
+      <a href="#rules" onclick="closeMobileMenu()">شروط العمل</a>
+      <a href="#track" onclick="closeMobileMenu()">تتبع شحنتك</a>
+      <a href="#update-shipment" onclick="closeMobileMenu()">تحديث شحنة</a>
+      <a href="#booking" onclick="closeMobileMenu()">اطلب شحنة</a>
+      <a href="#footer" onclick="closeMobileMenu()">تواصل معنا</a>
     </div>
   </header>
 
-  <!-- Public Site -->
-  <div id="public-site-shell" class="pt-20">
-    <!-- Hero -->
-    <section id="home" class="hero-pattern py-16 lg:py-24 text-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        <div class="lg:col-span-7 space-y-5 text-center lg:text-right">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-fire-500/40 text-fire-400 text-xs font-bold">
-            <span class="w-2 h-2 rounded-full bg-fire-500 animate-ping"></span>
-            <span>متابعة فورية متزامنة عبر جميع الأجهزة</span>
+  <div id="public-site-shell">
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="pill-badge">
+            <i class="fa-solid fa-bolt"></i>
+            <span>مزامنة فورية عبر جميع الأجهزة من شيت Orders</span>
           </div>
-          <h1 class="text-3xl sm:text-5xl font-black leading-tight">
-            شحن محلي ودولي فائق السرعة مع <span class="text-fire-500">دياب إكسبريس</span>
-          </h1>
-          <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+          <h1>شحن محلي ودولي فائق السرعة مع <span>دياب إكسبريس</span></h1>
+          <p>
             نقل الباسبورات، التأشيرات، المستندات الهامة، والطرود التجارية داخل جميع محافظات مصر وخارجها بدقة والتزام كامل.
           </p>
-          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
-            <a href="#booking" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-fire-500 hover:bg-fire-600 text-white font-extrabold px-7 py-3.5 rounded-2xl transition">
-              <i class="fa-solid fa-truck-fast"></i>
-              <span>احجز شحنة الآن</span>
-            </a>
-            <a href="#track" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white font-extrabold px-7 py-3.5 rounded-2xl border border-white/15 transition">
-              <i class="fa-solid fa-magnifying-glass-location text-fire-400"></i>
-              <span>تتبع شحنتك</span>
-            </a>
+          <div class="hero-btns">
+            <a href="#booking" class="btn-fire"><i class="fa-solid fa-truck-fast"></i> احجز شحنة الآن</a>
+            <a href="#track" class="btn-light"><i class="fa-solid fa-magnifying-glass-location"></i> تتبع شحنتك</a>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-white/10">
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5">
-              <div class="text-fire-400 font-black text-xl">12 - 48 ساعة</div>
-              <div class="text-slate-300 text-xs font-semibold mt-0.5">توصيل محلي لكل المحافظات</div>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-val">12 - 48 ساعة</div>
+              <div class="metric-lbl">توصيل محلي لكل المحافظات</div>
             </div>
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5">
-              <div class="text-fire-400 font-black text-xl">حتى 7 أيام</div>
-              <div class="text-slate-300 text-xs font-semibold mt-0.5">شحن دولي سريع خارج مصر</div>
+            <div class="metric-box">
+              <div class="metric-val">حتى 7 أيام</div>
+              <div class="metric-lbl">شحن دولي سريع خارج مصر</div>
             </div>
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-3.5">
-              <div class="text-fire-400 font-black text-xl">قبل 1:30 ظهراً</div>
-              <div class="text-slate-300 text-xs font-semibold mt-0.5">استلام في نفس اليوم</div>
+            <div class="metric-box">
+              <div class="metric-val">قبل 1:30 ظهراً</div>
+              <div class="metric-lbl">استلام في نفس اليوم</div>
             </div>
           </div>
         </div>
 
-        <div class="lg:col-span-5">
-          <div class="bg-navy-800/90 border border-white/15 rounded-3xl p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-white/10 pb-4">
-              <div>
-                <h3 class="font-extrabold text-base text-white">خدمة VIP للمستندات</h3>
-                <p class="text-xs text-slate-400">تأشيرات • باسبورات • عقود شركات</p>
-              </div>
-              <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">متاح الآن</span>
+        <div class="vip-card">
+          <div class="vip-head">
+            <div>
+              <div style="font-weight:900;font-size:17px;">خدمة VIP للمستندات</div>
+              <div style="font-size:12px;color:#94a3b8;">تأشيرات • باسبورات • عقود شركات</div>
             </div>
-            <div class="bg-navy-950/80 border border-white/10 rounded-2xl p-4 text-xs space-y-2">
-              <div class="flex justify-between text-slate-400">
-                <span>مواعيد الاستلام (Pick-up)</span>
-                <span class="text-fire-400 font-bold">يومياً</span>
-              </div>
-              <p class="text-slate-200 leading-relaxed">
-                الطلبات المسجلة <strong>قبل 1:30 ظهراً</strong> تُستلم في نفس اليوم، وبعد ذلك تُستلم في اليوم التالي.
-              </p>
-            </div>
-            <a href="https://wa.me/201038268327" target="_blank" rel="noopener noreferrer"
-              class="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl text-sm transition">
-              <i class="fa-brands fa-whatsapp text-lg"></i>
-              <span dir="ltr">01038268327</span>
-            </a>
+            <span class="vip-tag">متاح الآن</span>
+          </div>
+          <div class="pickup-box">
+            <div style="font-weight:800;color:#fb923c;margin-bottom:4px;">مواعيد الاستلام (Pick-up)</div>
+            <div>الطلبات المسجلة <strong>قبل 1:30 ظهراً</strong> تُستلم في نفس اليوم، وبعد ذلك تُستلم في اليوم التالي.</div>
+          </div>
+          <a href="https://wa.me/201038268327" target="_blank" rel="noopener noreferrer" class="wa-btn">
+            <i class="fa-brands fa-whatsapp" style="font-size:18px;"></i>
+            <span dir="ltr">01038268327</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section-white">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">خدماتنا اللوجستية</span>
+          <h2>حلول شحن متكاملة للأفراد والشركات</h2>
+          <p>نقل آمن ومنتظم للمستندات الرسمية، الباسبورات، والطرود المحلية والدولية.</p>
+        </div>
+        <div class="cards-4">
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-passport"></i></div>
+            <h3>الباسبورات والتأشيرات</h3>
+            <p>نقل مباشر وآمن لجوازات السفر والتأشيرات وأوراق السفارات للأفراد والشركات.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <h3>الشحن المحلي السريع</h3>
+            <p>تغطية شاملة لجميع محافظات مصر خلال <strong>12 إلى 48 ساعة</strong>.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-plane-up"></i></div>
+            <h3>الشحن الدولي السريع</h3>
+            <p>شحن دولي موثوق خارج مصر بمدة توصيل حتى <strong>7 أيام عمل</strong>.</p>
+          </div>
+          <div class="service-card">
+            <div class="service-icon"><i class="fa-solid fa-file-signature"></i></div>
+            <h3>الطرود والتعاقدات</h3>
+            <p>نقل العقود والطرود التجارية للشركات والمكاتب بانتظام ودقة عالية.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Services -->
-    <section id="services" class="py-16 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-12">
-          <span class="text-fire-600 font-extrabold text-xs bg-fire-500/10 px-4 py-1.5 rounded-full">خدماتنا اللوجستية</span>
-          <h2 class="text-2xl sm:text-4xl font-black text-navy-900 mt-3">حلول شحن متكاملة للأفراد والشركات</h2>
+    <section id="rules" class="section-gray">
+      <div class="container">
+        <div class="sec-head">
+          <h2>سياسة وقواعد العمل</h2>
+          <p>قواعد واضحة لضمان سرعة الاستلام والتسليم وحماية حقوق جميع الأطراف.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl bg-fire-500/15 text-fire-600 flex items-center justify
+        <div class="cards-3">
+          <div class="rule-card">
+            <h3>جدول الاستلام (Pick-up)</h3>
+            <p>الطلبات المسجلة قبل <strong>1:30 ظهراً</strong> تُستلم في نفس اليوم، وبعد ذلك تُستلم في اليوم التالي.</p>
+          </div>
+          <div class="rule-card orange">
+            <h3>الدفع المسبق وتأكيد السعر</h3>
+            <p>يتم سداد قيمة الشحن مسبقاً قبل الاستلام بعد تأكيد السعر الرسمي عبر واتساب <strong>01038268327</strong>.</p>
+          </div>
+          <div class="rule-card danger">
+            <h3>حظر نقل الشيكات والأوراق المالية</h3>
+            <p>لا تقوم الشركة بنقل أو استلام أي شيكات بنكية أو أوراق مالية قابلة للصرف أو مبالغ نقدية.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="track" class="section-dark">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">خدمة التتبع المباشر</span>
+          <h2>تتبع حالة شحنتك الآن</h2>
+          <p>
+            جرّب مثال:
+            <button type="button" onclick="fillSampleTracking('DE-2026-1001')" style="background:none;border:none;color:#fb923c;font-weight:800;text-decoration:underline;cursor:pointer;" dir="ltr">DE-2026-1001</button>
+            أو
+            <button type="button" onclick="fillSampleTracking('DE-2026-1002')" style="background:none;border:none;color:#fb923c;font-weight:800;text-decoration:underline;cursor:pointer;" dir="ltr">DE-2026-1002</button>
+          </p>
+        </div>
+
+        <div class="panel-box">
+          <form id="tracking-form" class="track-form">
+            <input type="text" id="tracking-input" class="form-control" required placeholder="أدخل الرقم المرجعي مثل DE-2026-1001" dir="ltr" />
+            <button type="submit" id="tracking-submit-btn" class="btn-fire" style="padding:12px 24px;">
+              <i class="fa-solid fa-magnifying-glass"></i> تتبع الشحنة
+            </button>
+          </form>
+          <div id="tracking-result" class="result-card hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="update-shipment" class="section-gray">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">إدارة ومتابعة الحركة</span>
+          <h2>تحديث حالة الشحنة</h2>
+          <p>تحديث حالة الشحنة مباشرة في شيت Orders ليظهر فوراً في التتبع من أي جهاز.</p>
+        </div>
+
+        <div class="panel-box">
+          <form id="public-status-update-form">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>الرقم المرجعي للشحنة *</label>
+                <input type="text" id="public-update-ref-input" class="form-control" required placeholder="مثال: DE-2026-1001" dir="ltr" />
+              </div>
+              <div class="form-group">
+                <label>حالة الشحنة الجديدة *</label>
+                <select id="public-update-status-select" class="form-control" required>
+                  <option value="تم تسجيل الطلب">تم تسجيل الطلب</option>
+                  <option value="تم الاستلام من العميل">تم الاستلام من العميل</option>
+                  <option value="في الطريق للفرع">في الطريق للفرع</option>
+                  <option value="قيد النقل">قيد النقل</option>
+                  <option value="جاري التوصيل للمستلم">جاري التوصيل للمستلم</option>
+                  <option value="تم التسليم بنجاح">تم التسليم بنجاح</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>تفاصيل آخر تحديث (اختياري)</label>
+              <input type="text" id="public-update-notes-input" class="form-control" placeholder="مثال: خرج المندوب للتسليم" />
+            </div>
+            <button type="submit" id="public-update-submit-btn" class="btn-fire" style="padding:12px 24px;">
+              <i class="fa-solid fa-arrows-rotate"></i> حفظ وتحديث الحالة الآن
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking" class="section-white">
+      <div class="container">
+        <div class="sec-head">
+          <span class="pill-badge">حجز شحنة جديدة</span>
+          <h2>اطلب شحنتك الآن</h2>
+          <p>سيتم تسجيل الطلب مباشرة في شيت Orders وإصدار رقم مرجعي للتتبع الفوري.</p>
+        </div>
+
+        <div class="panel-box">
+          <form id="booking-form">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>الراسل / الشركة *</label>
+                <input type="text" id="sender-name" class="form-control" required placeholder="مثال: شركة الأفق للسياحة" />
+              </div>
+              <div class="form-group">
+                <label>تليفون الراسل *</label>
+                <input type="tel" id="sender-phone" class="form-control" required placeholder="01038268327" dir="ltr" />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>نوع الشحنة *</label>
+                <select id="shipment-type" class="form-control" required>
+                  <option value="باسبورات (جوازات سفر)">باسبورات (جوازات سفر)</option>
+                  <option value="تأشيرات وأوراق سفارات">تأشيرات وأوراق سفارات</option>
+                  <option value="مستندات وعقود شركات">مستندات وعقود شركات</option>
+                  <option value="طرد تجاري / عينة">طرد تجاري / عينة</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>نطاق الشحن *</label>
+                <select id="shipping-scope" class="form-control" required>
+                  <option value="شحن محلي (12 - 48 ساعة)">شحن محلي (12 - 48 ساعة)</option>
+                  <option value="شحن دولي (حتى 7 أيام عمل)">شحن دولي (حتى 7 أيام عمل)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>عنوان الاستلام *</label>
+                <input type="text" id="pickup-address" class="form-control" required placeholder="المحافظة - المنطقة - العنوان" />
+              </div>
+              <div class="form-group">
+                <label>عنوان التسليم *</label>
+                <input type="text" id="delivery-address" class="form-control" required placeholder="المحافظة أو الدولة - العنوان" />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>اسم المستلم *</label>
+                <input type="text" id="recipient-name" class="form-control" required placeholder="اسم الشخص أو الفرع المستلم" />
+              </div>
+              <div class="form-group">
+                <label>تليفون المستلم *</label>
+                <input type="tel" id="recipient-phone" class="form-control" required placeholder="رقم هاتف المستلم" dir="ltr" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>ملاحظات إضافية</label>
+              <input type="text" id="shipment-notes" class="form-control" placeholder="أي تعليمات خاصة بالاستلام أو التسليم" />
+            </div>
+
+            <button type="submit" id="booking-submit-btn" class="btn-fire" style="width:100%;padding:14px 20px;font-size:15px;">
+              <i class="fa-solid fa-paper-plane"></i> تأكيد وحجز الشحنة الآن
+            </button>
+          </form>
+
+          <div id="booking-confirmation" class="hidden" style="margin-top:18px;background:#ecfdf5;border:1px solid #6ee7b7;border-radius:16px;padding:16px;"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section id="command-center-shell" class="hidden">
+    <div class="container">
+      <div class="dash-banner">
+        <div>
+          <div style="color:#fb923c;font-weight:800;font-size:12px;">مركز القيادة والإدارة</div>
+          <h2 style="margin:4px 0 0;font-size:24px;font-weight:900;">إدارة شحنات Diab Express (قاعدة Orders)</h2>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <button type="button" class="btn-fire" style="padding:10px 16px;font-size:13px;" onclick="syncAllShipmentsFromCloud(true)">
+            <i class="fa-solid fa-rotate"></i> مزامنة الشيت الآن
+          </button>
+          <button type="button" class="btn-light" style="padding:10px 16px;font-size:13px;" onclick="activatePortalMode('public')">
+            العودة للموقع العام
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">إجمالي الشحنات</div>
+          <div id="stat-total" class="stat-num">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">شحن محلي</div>
+          <div id="stat-local" class="stat-num" style="color:#ea580c;">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">شحن دولي</div>
+          <div id="stat-intl" class="stat-num" style="color:#1e3a8a;">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="font-size:12px;font-weight:800;color:#64748b;">تم التسليم</div>
+          <div id="stat-delivered" class="stat-num" style="color:#059669;">0</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;">
+          <h3 style="margin:0;font-size:18px;font-weight:900;">سجل الشحنات من تبويب Orders</h3>
+          <input type="text" id="admin-search-input" class="form-control" style="max-width:320px;" oninput="renderAdminTable()" placeholder="ابحث بالرقم المرجعي أو الراسل أو المستلم..." />
+        </div>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>الرقم المرجعي</th>
+              <th>الراسل / الشركة</th>
+              <th>المستلم</th>
+              <th>النطاق</th>
+              <th>الحالة</th>
+              <th>آخر تحديث</th>
+              <th>تحديث سريع</th>
+            </tr>
+          </thead>
+          <tbody id="admin-shipments-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer" class="site-footer">
+    <div class="container footer-inner">
+      <div><strong>DIAB EXPRESS</strong> — شحن وخدمات لوجستية محلية ودولية</div>
+      <a href="https://wa.me/201038268327" target="_blank" rel="noopener noreferrer" style="color:#34d399;font-weight:800;text-decoration:none;" dir="ltr">
+        <i class="fa-brands fa-whatsapp"></i> 01038268327
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxkzncaPo5iWzuw25lG5H-xjd_lkqiJesnUyw93nbohIMR4PvPtcFedcje9yEnsBnnH8A/exec".trim();
+    const CACHE_KEY = "diab_express_orders_cache_v2";
+    let shipmentsCache = [];
+
+    function showToast(message, type) {
+      const container = document.getElementById("toast-container");
+      const el = document.createElement("div");
+      el.className = "toast-msg" + (type === "success" ? " toast-success" : type === "error" ? " toast-error" : "");
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+
+    function normalizeRef(raw) {
+      let val = String(raw || "").trim().toUpperCase().replace(/\s+/g, "");
+      if (/^DE\d{4}-\d+$/.test(val)) val = val.replace(/^DE/, "DE-");
+      return val;
+    }
+
+    function saveLocalCache(list) {
+      shipmentsCache = Array.isArray(list) ? list : [];
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(shipmentsCache)); } catch (e) {}
+    }
+
+    function loadLocalCache() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) shipmentsCache = parsed;
+        }
+      } catch (e) {}
+    }
+
+    function normalizeShipmentItem(item) {
+      if (!item || typeof item !== "object") return null;
+      const ref = normalizeRef(item.ref || item["الرقم المرجعي"] || "");
+      if (!ref) return null;
+      const scope = item.scope || item.shippingScope || item["نطاق الشحن"] || "شحن محلي (12 - 48 ساعة)";
+      return {
+        ref,
+        arrivedAt: item.arrivedAt || item["وقت الوصول للشيت"] || "",
+        createdAt: item.createdAt || item["توقيت التسجيل"] || "",
+        senderName: item.senderName || item["الراسل / الشركة"] || "",
+        senderPhone: item.senderPhone || item["تليفون الراسل"] || "",
+        pickupAddress: item.pickupAddress || item["عنوان الاستلام"] || "",
+        shipmentType: item.shipmentType || item["نوع الشحنة"] || "",
+        scope,
+        deliveryEta: item.deliveryEta || item["مدة التسليم المتوقعة"] || "",
+        recipientName: item.recipientName || item.receiverName || item["اسم المستلم"] || "",
+        recipientPhone: item.recipientPhone || item.receiverPhone || item["تليفون المستلم"] || "",
+        deliveryAddress: item.deliveryAddress || item["عنوان التسليم"] || "",
+        notes: item.notes || item["ملاحظات إضافية"] || "",
+        status: item.status || item["حالة الشحنة"] || "تم تسجيل الطلب",
+        lastUpdate: item.lastUpdate || item["آخر تحديث"] || ""
+      };
+    }
+
+    async function fetchAllShipmentsFromCloud(showNotice) {
+      try {
+        const res = await fetch(WEB_APP_URL + "?action=list&t=" + Date.now(), { cache: "no-store" });
+        const data = await res.json();
+        const rawList = Array.isArray(data) ? data : (data.shipments || data.orders || data.data || []);
+        const normalized = rawList.map(normalizeShipmentItem).filter(Boolean);
+        saveLocalCache(normalized);
+        renderAdminTable();
+        if (showNotice) showToast("تمت مزامنة " + normalized.length + " شحنة من شيت Orders", "success");
+        return normalized;
+      } catch (err) {
+        renderAdminTable();
+        if (showNotice) showToast("تعذر جلب البيانات من الشيت حالياً", "error");
+        return shipmentsCache;
+      }
+    }
+
+    async function fetchShipmentByRef(rawRef) {
+      const ref = normalizeRef(rawRef);
+      if (!ref) return null;
+      try {
+        const res = await fetch(WEB_APP_URL + "?ref=" + encodeURIComponent(ref) + "&t=" + Date.now(), { cache: "no-store" });
+        const data = await res.json();
+        if (data && data.found) {
+          const item = normalizeShipmentItem(data.shipment || data);
+          if (item) return item;
+        }
+      } catch (e) {}
+
+      const list = await fetchAllShipmentsFromCloud(false);
+      return list.find((s) => normalizeRef(s.ref) === ref) || null;
+    }
+
+    async function postToWebApp(payload) {
+      await fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    function fillSampleTracking(ref) {
+      const input = document.getElementById("tracking-input");
+      input.value = ref;
+      document.getElementById("tracking-form").dispatchEvent(new Event("submit"));
+    }
+
+    function renderTrackingCard(ref, shipment) {
+      const box = document.getElementById("tracking-result");
+      box.classList.remove("hidden");
+      if (!shipment) {
+        box.innerHTML =
+          '<div style="background:rgba(127,29,29,0.45);border:1px solid rgba(248,113,113,0.45);border-radius:16px;padding:18px;text-align:center;">' +
+          '<div style="font-weight:900;color:#fca5a5;font-size:15px;">(' + ref + ') لم يتم العثور على شحنة بالرقم</div>' +
+          '<div style="font-size:12px;color:#e2e8f0;margin-top:4px;">تأكد من الرقم المرجعي أو تواصل عبر واتساب <span dir="ltr">01038268327</span></div>' +
+          "</div>";
+        return;
+      }
+
+      box.innerHTML =
+        '<div style="background:var(--navy-950);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:18px;">' +
+          '<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:12px;">' +
+            '<div><div style="font-size:12px;color:#94a3b8;">رقم البوليصة</div><div style="font-size:20px;font-weight:900;" dir="ltr">' + shipment.ref + '</div></div>' +
+            '<span class="status-badge">' + (shipment.status || "تم تسجيل الطلب") + '</span>' +
+          '</div>' +
+          '<div class="detail-grid">' +
+            '<div class="detail-item"><div style="font-size:11px;color:#94a3b8;">وجهة التسليم</div><div style="font-weight:800;">' + (shipment.deliveryAddress || "-") + '</div></div>' +
+            '<div class="detail-item"><div style="font-size:11px;color:#94a3b8;">نطاق الشحن</div><div style="font-weight:800;">' + (shipment.scope || "-") + '</div></div>' +
+            '<div class="detail-item"><div style="font-size:11px;color:#94a3b8;">نوع الشحنة</div><div style="font-weight:800;">' + (shipment.shipmentType || "-") + '</div></div>' +
+          '</div>' +
+          '<div style="background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.35);border-radius:12px;padding:12px;font-size:13px;">' +
+            '<strong style="color:#fb923c;">آخر تحديث:</strong> ' + (shipment.lastUpdate || shipment.status || "تم تسجيل الطلب") +
+          '</div>' +
+        '</div>';
+    }
+
+    document.getElementById("tracking-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const ref = normalizeRef(document.getElementById("tracking-input").value);
+      document.getElementById("tracking-input").value = ref;
+      const btn = document.getElementById("tracking-submit-btn");
+      btn.disabled = true;
+      btn.textContent = "جاري البحث...";
+      try {
+        const shipment = await fetchShipmentByRef(ref);
+        renderTrackingCard(ref, shipment);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> تتبع الشحنة';
+      }
+    });
+
+    document.getElementById("booking-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById("booking-submit-btn");
+      btn.disabled = true;
+      btn.textContent = "جاري تسجيل الشحنة...";
+
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      const timestamp = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate()) + " " + pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
+      const ref = "DE-" + now.getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
+      const scope = document.getElementById("shipping-scope").value;
+
+      const payload = {
+        ref,
+        createdAt: timestamp,
+        senderName: document.getElementById("sender-name").value.trim(),
+        senderPhone: document.getElementById("sender-phone").value.trim(),
+        pickupAddress: document.getElementById("pickup-address").value.trim(),
+        shipmentType: document.getElementById("shipment-type").value,
+        shippingScope: scope,
+        scope,
+        deliveryEta: scope.indexOf("دولي") !== -1 ? "حتى 7 أيام عمل" : "12 - 48 ساعة",
+        recipientName: document.getElementById("recipient-name").value.trim(),
+        recipientPhone: document.getElementById("recipient-phone").value.trim(),
+        deliveryAddress: document.getElementById("delivery-address").value.trim(),
+        notes: document.getElementById("shipment-notes").value.trim(),
+        status: "تم تسجيل الطلب",
+        lastUpdate: "تم تسجيل الطلب (" + timestamp + ")"
+      };
+
+      try {
+        await postToWebApp(payload);
+        saveLocalCache([payload].concat(shipmentsCache));
+        renderAdminTable();
+        e.target.reset();
+
+        const conf = document.getElementById("booking-confirmation");
+        conf.classList.remove("hidden");
+        conf.innerHTML =
+          '<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">' +
+            '<div><div style="color:#047857;font-weight:900;font-size:17px;">تم تسجيل شحنتك بنجاح!</div>' +
+            '<div style="font-size:14px;margin-top:4px;">الرقم المرجعي: <strong dir="ltr">' + ref + '</strong></div></div>' +
+            '<button type="button" class="btn-fire" style="padding:10px 16px;font-size:13px;" onclick="document.getElementById(\'track\').scrollIntoView({behavior:\'smooth\'});fillSampleTracking(\'' + ref + '\');">تتبع الشحنة الآن</button>' +
+          '</div>';
+        showToast("تم تسجيل الشحنة برقم " + ref, "success");
+      } catch (err) {
+        showToast("تعذر إرسال الطلب", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> تأكيد وحجز الشحنة الآن';
+      }
+    });
+
+    document.getElementById("public-status-update-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const ref = normalizeRef(document.getElementById("public-update-ref-input").value);
+      const status = document.getElementById("public-update-status-select").value;
+      const notes = document.getElementById("public-update-notes-input").value.trim();
+      const updateText = notes ? (status + " - " + notes) : status;
+
+      const btn = document.getElementById("public-update-submit-btn");
+      btn.disabled = true;
+      btn.textContent = "جاري التحديث...";
+
+      try {
+        await postToWebApp({
+          action: "update",
+          ref,
+          status,
+          updateText,
+          lastUpdate: updateText
+        });
+        showToast("تم تحديث حالة " + ref + " إلى: " + status, "success");
+        setTimeout(() => fetchAllShipmentsFromCloud(false), 1200);
+      } catch (err) {
+        showToast("تعذر إرسال التحديث", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> حفظ وتحديث الحالة الآن';
+      }
+    });
+
+    function renderAdminTable() {
+      const q = (document.getElementById("admin-search-input")?.value || "").trim().toLowerCase();
+      const tbody = document.getElementById("admin-shipments-tbody");
+      if (!tbody) return;
+
+      const total = shipmentsCache.length;
+      const localCount = shipmentsCache.filter((s) => String(s.scope).indexOf("محلي") !== -1).length;
+      const intlCount = shipmentsCache.filter((s) => String(s.scope).indexOf("دولي") !== -1).length;
+      const deliveredCount = shipmentsCache.filter((s) => String(s.status).indexOf("تم التسليم") !== -1).length;
+
+      document.getElementById("stat-total").textContent = total;
+      document.getElementById("stat-local").textContent = localCount;
+      document.getElementById("stat-intl").textContent = intlCount;
+      document.getElementById("stat-delivered").textContent = deliveredCount;
+
+      const filtered = shipmentsCache.filter((s) => {
+        if (!q) return true;
+        return [s.ref, s.senderName, s.recipientName, s.status, s.deliveryAddress]
+          .some((v) => String(v || "").toLowerCase().indexOf(q) !== -1);
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#94a3b8;font-weight:800;padding:24px;">لا توجد شحنات معروضة حالياً — اضغط مزامنة الشيت الآن</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((s) =>
+        "<tr>" +
+          '<td style="font-weight:900;" dir="ltr">' + s.ref + "</td>" +
+          '<td style="font-weight:700;">' + (s.senderName || "-") + "</td>" +
+          "<td>" + (s.recipientName || "-") + "</td>" +
+          '<td style="font-size:12px;font-weight:700;">' + (s.scope || "-") + "</td>" +
+          '<td><span class="status-badge">' + (s.status || "-") + "</span></td>" +
+          '<td style="font-size:12px;color:#64748b;">' + (s.lastUpdate || "-") + "</td>" +
+          "<td>" +
+            '<select onchange="quickUpdateStatus(\'' + s.ref + '\', this.value)" style="padding:6px 8px;border-radius:8px;border:1px solid #cbd5e1;font-family:inherit;font-size:12px;font-weight:700;">' +
+              '<option value="">اختر حالة...</option>' +
+              '<option value="تم الاستلام من العميل">تم الاستلام من العميل</option>' +
+              '<option value="في الطريق للفرع">في الطريق للفرع</option>' +
+              '<option value="قيد النقل">قيد النقل</option>' +
+              '<option value="جاري التوصيل للمستلم">جاري التوصيل للمستلم</option>' +
+              '<option value="تم التسليم بنجاح">تم التسليم بنجاح</option>' +
+            "</select>" +
+          "</td>" +
+        "</tr>"
+      ).join("");
+    }
+
+    async function quickUpdateStatus(ref, newStatus) {
+      if (!newStatus) return;
+      await postToWebApp({
+        action: "update",
+        ref,
+        status: newStatus,
+        updateText: newStatus,
+        lastUpdate: newStatus
+      });
+      showToast("تم تحديث " + ref + " إلى " + newStatus, "success");
+      setTimeout(() => fetchAllShipmentsFromCloud(false), 1200);
+    }
+
+    function activatePortalMode(mode) {
+      const pub = document.getElementById("public-site-shell");
+      const cmd = document.getElementById("command-center-shell");
+      const indicator = document.getElementById("portal-mode-indicator");
+      const btnPub = document.getElementById("btn-switch-public");
+      const btnCmd = document.getElementById("btn-switch-command");
+
+      if (mode === "command") {
+        pub.classList.add("hidden");
+        cmd.classList.remove("hidden");
+        indicator.textContent = "الوضع الحالي: مركز القيادة والإدارة";
+        btnCmd.classList.add("active");
+        btnPub.classList.remove("active");
+        fetchAllShipmentsFromCloud(false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        cmd.classList.add("hidden");
+        pub.classList.remove("hidden");
+        indicator.textContent = "الوضع الحالي: الموقع العام للعملاء (تتبع وحجز)";
+        btnPub.classList.add("active");
+        btnCmd.classList.remove("active");
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById("mobile-menu").classList.toggle("hidden");
+    }
+    function closeMobileMenu() {
+      document.getElementById("mobile-menu").classList.add("hidden");
+    }
+
+    loadLocalCache();
+    renderAdminTable();
+    fetchAllShipmentsFromCloud(false);
+  </script>
+</body>
+</html>
